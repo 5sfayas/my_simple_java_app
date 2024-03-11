@@ -62,8 +62,14 @@ jobs:
         run: |
           mkdir -p deployment/target
           cp -r codedeploy/* deployment/
-          cp target/hupe-life-0.0.1-SNAPSHOT.jar deployment/target/
+          cp target/my-java-app-1.0-SNAPSHOT.jar deployment/target/
           zip -r deployment-$BUILD_NUMBER.zip deployment
+          
+      - name: Publish Deployment Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: deployment-artifact
+          path: deployment-$GITHUB_RUN_NUMBER.zip
 
   deploy:
     needs: [get-environment, build]
@@ -72,6 +78,13 @@ jobs:
     permissions:
       id-token: write
       contents: read
+    steps:
+      - name: Check Deployment Artifact
+        run: |
+          if [ ! -f deployment-$GITHUB_RUN_NUMBER.zip ]; then
+            echo "Error: Deployment artifact not found. Make sure it is created in the build job."
+            exit 1
+          fi
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
