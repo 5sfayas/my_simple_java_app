@@ -69,7 +69,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: deployment-artifact
-          path: deployment-$BUILD_NUMBER.zip
+          path: ./deployment-$BUILD_NUMBER.zip
 
   deploy:
     needs: [get-environment, build]
@@ -81,7 +81,7 @@ jobs:
     steps:
       - name: Check Deployment Artifact
         run: |
-          if [ ! -f deployment-$BUILD_NUMBER.zip ]; then
+          if [ ! -f ./deployment-$BUILD_NUMBER.zip ]; then
             echo "Error: Deployment artifact not found. Make sure it is created in the build job."
             exit 1
           fi
