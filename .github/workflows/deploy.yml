@@ -63,7 +63,7 @@ jobs:
           mkdir -p deployment/target
           cp -r codedeploy/* deployment/
           cp target/hupe-life-0.0.1-SNAPSHOT.jar deployment/target/
-          zip -r deployment-${{ variables.BUILD_NUMBER }}.zip deployment
+          zip -r deployment-$BUILD_NUMBER.zip deployment
 
   deploy:
     needs: [get-environment, build]
@@ -82,14 +82,14 @@ jobs:
 
       - name: Deploy to AWS CodeDeploy
         run: |
-          aws s3 cp deployment-${{ variables.BUILD_NUMBER }}.zip s3://${{ vars.CODE_DEPLOY_BUCKET }}/api/deployment-${{ variables.BUILD_NUMBER }}.zip
+          aws s3 cp deployment-$BUILD_NUMBER.zip s3://${{ vars.CODE_DEPLOY_BUCKET }}/api/deployment-$BUILD_NUMBER.zip
 
           deploymentId=$(aws deploy create-deployment \
               --application-name ${{ vars.CODE_DEPLOY_APPLICATION }} \
               --deployment-group-name ${{ vars.CODE_DEPLOY_GROUP }} \
-              --s3-location bucket=${{ vars.CODE_DEPLOY_BUCKET }},key=api/deployment-${{ variables.BUILD_NUMBER }}.zip,bundleType=zip \
+              --s3-location bucket=${{ vars.CODE_DEPLOY_BUCKET }},key=api/deployment-$BUILD_NUMBER.zip,bundleType=zip \
               --file-exists-behavior OVERWRITE \
-              --description "Staging api-backend deployment - ${{ variables.BUILD_NUMBER }}" --region ${{ secrets.AWS_REGION }} | jq -r '.deploymentId')
+              --description "Staging api-backend deployment - $BUILD_NUMBER" --region ${{ secrets.AWS_REGION }} | jq -r '.deploymentId')
 
           # check deployment status
           deploymentStatus=""
