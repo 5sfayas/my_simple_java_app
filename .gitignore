@@ -1,1 +1,3 @@
 .DS*
+target/
+.idea/
