@@ -56,7 +56,7 @@ jobs:
 
       - name: Build API APP - JAR
         run: |
-          mvnw clean package
+          ./mvnw clean package
 
       - name: Create Deployment Bundle
         run: |
