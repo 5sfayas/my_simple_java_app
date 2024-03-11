@@ -64,6 +64,7 @@ jobs:
           cp -r codedeploy/* deployment/
           cp target/my-java-app-1.0-SNAPSHOT.jar deployment/target/
           zip -r deployment-$BUILD_NUMBER.zip deployment
+          ls -al && pwd
 
       - name: Publish Deployment Artifact
         uses: actions/upload-artifact@v2
