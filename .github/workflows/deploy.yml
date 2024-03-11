@@ -6,9 +6,10 @@ on:
       - main
       - staging
 
+env:
+  BUILD_NUMBER: ${{ github.run_number }}
+
 jobs:
-  env:
-    BUILD_NUMBER: ${{ github.run_number }}
 
   get-environment:
     name: Get Environment
